@@ -11,7 +11,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
-            - /
+            - .
   
   print_ouptut_file:
     docker:
