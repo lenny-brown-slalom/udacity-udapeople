@@ -21,6 +21,14 @@ jobs:
       - run:
           name: "Print world"
           command: "echo World!"
+  
+  print_name:
+    executor: node_executor
+    steps:
+      - checkout
+      - run:
+          name: "Print my name: $MY_NAME"
+          command: "echo $MY_NAME"
 
 workflows:
   say-hello-workflow:
@@ -29,3 +37,6 @@ workflows:
       - print_world:
           requires:
             - print_hello
+      - print_name:
+          requires:
+            - print_world
