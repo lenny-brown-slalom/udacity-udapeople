@@ -18,7 +18,7 @@ jobs:
       - image: cimg/base:2021.11
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: .
       - run:
           name: "Print from output file"
           command: cat output.txt   
