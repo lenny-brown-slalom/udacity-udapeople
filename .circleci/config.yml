@@ -27,8 +27,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Print my name: $MY_NAME"
-          command: "echo $MY_NAME"
+          name: "Print my name from project environemnt variable"
+          command: echo ${MY_NAME}
 
 workflows:
   say-hello-workflow:
