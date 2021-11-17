@@ -9,7 +9,7 @@ jobs:
           name: "Save hello world to output.txt"
           command: echo "Hello, World" > output.txt
       - persist_to_workspace:
-          root: /tmp/workspace
+          root: .
           paths:
             - .
   
