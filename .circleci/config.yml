@@ -1,42 +1,32 @@
 version: 2.1
 
-executors:
-  node_executor:
-    docker:
-      - image: cimg/node:17.1.0
-
 jobs:
-  print_hello:
-    executor: node_executor
+  save_hello_world:
+    docker:
+      - image: cimg/base:2021.11
     steps:
-      - checkout
       - run:
-          name: "Print hello"
-          command: "echo Hello"
+          name: "Save hello world to output.txt"
+          command: echo "Hello, World" > output.txt
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - /
   
-  print_world:
-    executor: node_executor
+  print_ouptut_file:
+    docker:
+      - image: cimg/base:2021.11
     steps:
-      - checkout
+      - attach_workspace:
+          at: /tmp/workspace
       - run:
-          name: "Print world"
-          command: "echo World!"
-  
-  print_name:
-    executor: node_executor
-    steps:
-      - checkout
-      - run:
-          name: "Print my name from project environemnt variable"
-          command: echo ${MY_NAME}
+          name: "Print from output file"
+          command: cat output.txt   
 
 workflows:
   say-hello-workflow:
     jobs:
-      - print_hello
+      - print_hello_world
       - print_world:
           requires:
-            - print_hello
-      - print_name:
-          requires:
-            - print_world
+            - print_hello_world
