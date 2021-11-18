@@ -26,7 +26,15 @@ jobs:
       - print_pipeline_id 
       - run:
           name: "Print from output file"
-          command: cat ~/output.txt   
+          command: cat ~/output.txt
+      - run: return 1
+
+  failure_recovery:
+    docker:
+      - image: cimg/base:2021.11
+    steps:
+      - run: echo "You're job failed! Haha!"
+    when: on_fail
 
 workflows:
   workflow:
@@ -35,3 +43,4 @@ workflows:
       - print_ouptut_file:
           requires:
             - save_hello_world
+      - failure_recovery
