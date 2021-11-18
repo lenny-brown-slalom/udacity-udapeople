@@ -24,8 +24,6 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-npm-packages
-      - run: ls -a .
-      - run: ls -a ./src
       - run: npm run test -- --watchAll=false
   
   analyze:
