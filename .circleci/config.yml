@@ -1,13 +1,18 @@
 version: 2.1
 
+executors:
+  node_executor:
+    docker:
+      - image: cimg/node:17.1.0
+
 commands:
   print_pipeline_id:
     steps:
       - run: echo ${CIRCLE_WORKFLOW_ID}
+
 jobs:
   save_hello_world:
-    docker:
-      - image: cimg/base:2021.11
+    executor: node_executor
     steps:
       - run:
           name: "Save hello world to output.txt"
@@ -18,8 +23,7 @@ jobs:
             - output.txt
   
   print_ouptut_file:
-    docker:
-      - image: cimg/base:2021.11
+    executor: node_executor
     steps:
       - attach_workspace:
           at: ~/
