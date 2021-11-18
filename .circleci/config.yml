@@ -16,7 +16,7 @@ jobs:
       - save_cache:
           key: "npm-packages"
           paths:
-            - /src/node_modules
+            - ./node_modules
   
   test:
     executor: node_executor
@@ -27,7 +27,6 @@ jobs:
             - "npm-packages"
       - run: ls -a .
       - run: ls -a ./src
-      - run: ls -a ./src/node_modules
       - run: npm run test -- --watchAll=false
   
   analyze:
