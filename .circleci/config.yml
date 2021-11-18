@@ -31,10 +31,6 @@ jobs:
       - run:
           name: "Print from output file"
           command: cat ~/output.txt
-      - run: return 1
-      - run:
-          command: echo "You're job failed! Haha!"
-          when: on_fail
 
 workflows:
   workflow:
