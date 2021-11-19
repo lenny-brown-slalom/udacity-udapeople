@@ -25,15 +25,20 @@ jobs:
       - restore_cache:
           key: v1-npm-packages
       - run: npm run test -- --watchAll=false
-  
-  analyze:
-    executor: node_executor
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-npm-packages
-      - run: npm audit
 
+  create_infrastructure: 
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Create Cloudformation Stack
+            command: |
+              aws cloudformation deploy \
+                --template-file template.yml \
+                --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
+                --region us-east-1
+  
 workflows:
   workflow:
     jobs:
@@ -41,7 +46,7 @@ workflows:
       - test:
           requires:
             - install
-      - analyze:
+      - create_infrastructure:
           requires:
             - test
             
