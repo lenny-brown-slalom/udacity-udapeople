@@ -70,7 +70,8 @@ jobs:
         - destroy_environment
   
   configure_infrastructure:
-    executor: cimg/python:3.10.0
+    docker: 
+      - image: cimg/python:3.10.0
     steps:
       - checkout
       - attach_workspace:
