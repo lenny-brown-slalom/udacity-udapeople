@@ -44,7 +44,10 @@ jobs:
       steps:
         - checkout
         - run:
-            name: Create Cloudformation Stack
+            name: "install tar for workspace persistence"
+            command: apt-get install tar -y
+        - run:
+            name: "create cloudformation stack"
             command: |
               aws cloudformation deploy \
                 --template-file cfn-template.yml \
