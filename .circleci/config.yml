@@ -97,7 +97,6 @@ workflows:
       - create_infrastructure:
           # requires:
           #   - test
-          context: aws
           filters:
             branches:
               only:
