@@ -11,12 +11,16 @@ executors:
 commands:
   # Exercise - Rollback
   destroy_environment:
+    parameters:
+      stack_name:
+        default: "udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5}"
+        type: string
     steps:
       - run:
           name: Destroy environment
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5}
+            aws cloudformation delete-stack --stack-name <<parameters.stack_name>>
 
 jobs:
   install:
@@ -67,7 +71,8 @@ jobs:
             root: .
             paths:
               - inventory
-        - destroy_environment
+        - destroy_environment:
+            stack_name: "udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5}"
   
   configure_infrastructure:
     docker: 
@@ -115,7 +120,8 @@ jobs:
                 --region us-east-1 \
                 --parameter-overrides MyBucketName="udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7}"
         - run: aws s3 sync . s3://udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
-        - destroy_environment
+        - destroy_environment:
+            stack_name: "udacity-udapeople-create-bucket-${CIRCLE_WORKFLOW_ID:0:7}"
   
   get_last_deployment_id:
     executor: aws-cli/default
@@ -145,6 +151,8 @@ jobs:
             --template-file cfn-cloudfront.yml \
             --stack-name production-distro \
             --parameter-overrides PipelineID="udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          stack_name: "udacity-udapeople-create-bucket-${CIRCLE_WORKFLOW_ID:0:7}"
 
   clean_up_old_front_end:
     executor: aws-cli/default
