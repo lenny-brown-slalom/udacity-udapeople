@@ -87,6 +87,22 @@ jobs:
           name: "configure server"
           command: ansible-playbook -i inventory playbook.yml
 
+  smoke_test:
+    docker:
+      - image: cimg/base:2021.11
+    steps:
+      - run:
+          name: "smoke test"
+          command: |
+            URL="https://blog.udacity.com/"
+            # test website exists
+            if curl -s --head ${URL}
+            then
+              return 0
+            else
+              return 1
+            fi
+
 workflows:
   workflow:
     jobs:
@@ -94,17 +110,18 @@ workflows:
       # - test:
       #     requires:
       #       - install
-      - create_infrastructure:
-          # requires:
-          #   - test
-          filters:
-            branches:
-              only:
-                - "main"
-      - configure_infrastructure:
-          requires:
-            - create_infrastructure
-          filters:
-            branches:
-              only:
-                - "main"  
+      # - create_infrastructure:
+      #     # requires:
+      #     #   - test
+      #     filters:
+      #       branches:
+      #         only:
+      #           - "main"
+      # - configure_infrastructure:
+      #     requires:
+      #       - create_infrastructure
+      #     filters:
+      #       branches:
+      #         only:
+      #           - "main"
+      - smoke_test  
