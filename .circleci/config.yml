@@ -50,31 +50,36 @@ jobs:
                 --template-file cfn-template.yml \
                 --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
                 --region us-east-1
+        - run: 
+            name: "create inventory file"
+            command: echo "[all]" > inventory
+        - run:
+            name: "add ip to inventory file"
+            command: |
+              aws cloudformation \
+                --profile udacity \
+                --region us-east-1 \
+                describe-stacks \
+                --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
+                --query "Stacks[0].Outputs[?OutputKey=='ec2PublicIP'].OutputValue" \
+                --output text >> inventory
+        - persist_to_workspace:
+            root: .
+            paths:
+              - inventory
         - destroy_environment
   
   configure_infrastructure:
-    docker:
-      - image: cimg/python:3.10.0
+    executor: cimg/python:3.10.0
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - add_ssh_keys:
           fingerprints: ["a8:a3:cf:6f:38:04:c3:5c:8e:0a:70:ca:d8:77:11:68"]
       - run:
           name: "install ansible deps"
           command: pip install ansible
-      - run: 
-          name: "create inventory file"
-          command: echo "[all]" > inventory
-      - run:
-          name: "add ip to inventory file"
-          command: |
-            aws cloudformation \
-              --profile udacity \
-              --region us-east-1 \
-              describe-stacks \
-              --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
-              --query "Stacks[0].Outputs[?OutputKey=='ec2PublicIP'].OutputValue" \
-              --output text >> inventory
       - run:
           name: "configure server"
           command: ansible-playbook -i inventory playbook.yml
