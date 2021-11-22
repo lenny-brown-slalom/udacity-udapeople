@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@2.0
+
 executors:
   node_executor:
     docker:
@@ -39,13 +42,10 @@ jobs:
       - run: npm run test -- --watchAll=false
 
   create_infrastructure: 
-      docker:
-        - image: amazon/aws-cli
+      executor: aws-cli/default
       steps:
         - checkout
-        - run:
-            name: "install tar for workspace persistence"
-            command: apt-get install tar -y
+        - aws-cli/setup
         - run:
             name: "create cloudformation stack"
             command: |
@@ -97,6 +97,7 @@ workflows:
       - create_infrastructure:
           # requires:
           #   - test
+          context: aws
           filters:
             branches:
               only:
