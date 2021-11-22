@@ -1,9 +1,18 @@
 ---
-- name: Exercise for setting up a web server in an EC 
-  hosts: all
+- name: Set up a web server in an EC2 and export nodejs logs
+  hosts: nodejs
   user: ubuntu
   become: true
   become_method: sudo
   become_user: root
   roles:
-    - setup
+    - setup-nodejs
+
+- name: Set up a prometheus server in an EC2 and import nodejs logs
+  hosts: prometheus
+  user: ubuntu
+  become: true
+  become_method: sudo
+  become_user: root
+  roles:
+    - setup-prometheus

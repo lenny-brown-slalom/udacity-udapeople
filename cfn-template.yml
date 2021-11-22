@@ -2,28 +2,62 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: ND9991 C3 L4 
 Resources:
-  EC2Instance:
+  NodeJSEC2Instance:
     Type: 'AWS::EC2::Instance'
     Properties:
       SecurityGroups:
-        - !Ref InstanceSecurityGroup
-      # Change this, as applicable to you      
+        - !Ref NodeJSInstanceSecurityGroup
       KeyName: udacity
-      # Change this, as applicable to you
-      # You may need to find out what instance types are available in your region - use https://cloud-images.ubuntu.com/locator/ec2/
       ImageId: 'ami-083654bd07b5da81d' 
       InstanceType: t2.micro
-  InstanceSecurityGroup:
+  NodeJSInstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      GroupDescription: Enable SSH access via port 22
+      GroupDescription: Enable SSH access via port 22, 9100, and 80
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '22'
           ToPort: '22'
-          CidrIp: 0.0.0.0/0 
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '9100'
+          ToPort: '9100'
+          CidrIp: 0.0.0.0/0   
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+
+  PrometheusEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      SecurityGroups:
+        - !Ref PrometheusInstanceSecurityGroup
+      KeyName: udacity
+      ImageId: 'ami-083654bd07b5da81d' 
+      InstanceType: t2.micro
+  PrometheusInstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH access via port 22, 9100, and 9090
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '9100'
+          ToPort: '9100'
+          CidrIp: 0.0.0.0/0   
+        - IpProtocol: tcp
+          FromPort: '9090'
+          ToPort: '9090'
+          CidrIp: 0.0.0.0/0    
 
 Outputs:
-  ec2PublicIP:
-    Description: The public ip of our ec2 instnance
-    Value: !GetAtt EC2Instance.PublicIp
+  nodejsEC2PublicDNS:
+    Description: The public dns of our nodejs ec2 instnance
+    Value: !GetAtt NodeJSEC2Instance.PublicDnsName
+  prometheusEC2PublicDNS:
+    Description: The public dns of our prometheus ec2 instnance
+    Value: !GetAtt PrometheusEC2Instance.PublicDnsName

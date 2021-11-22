@@ -57,15 +57,23 @@ jobs:
                 --region us-east-1
         - run: 
             name: "create inventory file"
-            command: echo "[all]" > inventory
+            command: 
         - run:
             name: "add ip to inventory file"
             command: |
+              echo "[nodejs]" > inventory 
               aws cloudformation \
                 --region us-east-1 \
                 describe-stacks \
                 --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
-                --query "Stacks[0].Outputs[?OutputKey=='ec2PublicIP'].OutputValue" \
+                --query "Stacks[0].Outputs[?OutputKey=='nodejsEC2PublicDNS'].OutputValue" \
+                --output text >> inventory
+              echo "\n[prometheus]" >> inventory
+              aws cloudformation \
+                --region us-east-1 \
+                describe-stacks \
+                --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
+                --query "Stacks[0].Outputs[?OutputKey=='prometheusEC2PublicDNS'].OutputValue" \
                 --output text >> inventory
         - persist_to_workspace:
             root: .
@@ -174,27 +182,27 @@ workflows:
       # - test:
       #     requires:
       #       - install
-      # - create_infrastructure:
-      #     # requires:
-      #     #   - test
-      #     filters:
-      #       branches:
-      #         only:
-      #           - "main"
-      # - configure_infrastructure:
-      #     requires:
-      #       - create_infrastructure
-      #     filters:
-      #       branches:
-      #         only:
-      #           - "main"
+      - create_infrastructure:
+          # requires:
+          #   - test
+          filters:
+            branches:
+              only:
+                - "main"
+      - configure_infrastructure:
+          requires:
+            - create_infrastructure
+          filters:
+            branches:
+              only:
+                - "main"
       # - smoke_test
-      - create_and_deploy_front_end  
-      - get_last_deployment_id
-      - promote_to_production:
-          requires:
-            - create_and_deploy_front_end
-      - clean_up_old_front_end:
-          requires:
-            - promote_to_production
-            - get_last_deployment_id
+      # - create_and_deploy_front_end  
+      # - get_last_deployment_id
+      # - promote_to_production:
+      #     requires:
+      #       - create_and_deploy_front_end
+      # - clean_up_old_front_end:
+      #     requires:
+      #       - promote_to_production
+      #       - get_last_deployment_id

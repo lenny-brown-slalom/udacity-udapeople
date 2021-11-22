@@ -1,0 +1,64 @@
+---
+- name: "update apt packages."
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: "remove uneeded deps"
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: "add user for node exporter"
+  shell: 'useradd --no-create-home node_exporter'
+
+- name: "download and untar our node_exporter.tar.gz file into the proper directory"
+  ansible.builtin.unarchive:
+    src: "https://github.com/prometheus/node_exporter/releases/download/v1.3.0/node_exporter-1.3.0.linux-amd64.tar.gz"
+    dest: /usr/local/bin/node_exporter
+    remote_src: yes
+
+- name: "copy our node-exporter.service file into the correct directory"
+  template: 
+    src: "node-exporter.service"
+    dest: "/etc/systemd/system/node-exporter.service"
+
+- name: "setup node-exporter service"
+  shell: |
+    systemctl daemon-reload
+    systemctl enable node-exporter
+    systemctl start node-exporter
+    systemctl status node-exporter
+
+- name: "grab nodejs from nodesource"
+  shell: "curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -"
+
+- name: "install NodeJS and NPM using apt"
+  apt: 
+    name: "nodejs"
+    state: present # default
+
+- name: "install pm2 using npm"
+  npm:
+    name: "pm2"
+    state: present # default
+    global: yes
+
+- name: "ensure web dir exists"
+  file:
+    path: "~/web"
+    state: directory
+    mode: 0755
+
+- name: "copy our test index page to our web dir"
+  template: 
+    src: "files/index.js"
+    dest: "~/web/index.js"
+
+- name: "start up nodejs server using pm2"
+  shell: "pm2 start ~/web/index.js -f"
