@@ -94,6 +94,8 @@ jobs:
       - run:
           name: "configure server"
           command: ansible-playbook -i inventory playbook.yml
+      - destroy_environment:
+            stack_name: "udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5}"
 
   smoke_test:
     docker:
