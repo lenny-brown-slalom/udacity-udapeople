@@ -114,7 +114,7 @@ jobs:
                 --stack-name udacity-udapeople-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
                 --region us-east-1 \
                 --parameter-overrides MyBucketName="udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7}"
-        - run: aws s3 sync ./simplesite.html s3://udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
+        - run: aws s3 sync . s3://udacity-udapeople-lb-public-bucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
         - destroy_environment
   
   get_last_deployment_id:
