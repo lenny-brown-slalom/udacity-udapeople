@@ -25,7 +25,7 @@
 
 - name: "copy our node-exporter.service file into the correct directory"
   template: 
-    src: "node-exporter.service"
+    src: "files/node-exporter.service"
     dest: "/etc/systemd/system/node-exporter.service"
 
 - name: "setup node-exporter service"

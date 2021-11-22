@@ -26,6 +26,26 @@
     dest: ~/prometheus
     remote_src: yes
 
+- name: "copy our prometheus.yml file into the correct directory"
+  template: 
+    src: "files/prometheus.yml"
+    dest: "/etc/systemd/system/prometheus.yml"
+
+- name: "get our nodejs ec2 public dns name and input into prometheus file"
+  ansible.builtin.replace:
+    path: "/etc/systemd/system/prometheus.yml"
+    regexp: "^nodejsEC2PublicDNS$"
+    replace: "{{ item }}"
+  with_inventory_hostnames:
+    - nodejs
+
+
+
+- name: "copy our prometheus.service file into the correct directory"
+  template: 
+    src: "files/prometheus.service"
+    dest: "/etc/systemd/system/prometheus.service"
+
 - name: "move prometheus files where they need to go"
   shell: |
     cp ~/prometheus/prometheus /usr/local/bin
@@ -33,6 +53,19 @@
     cp -r ~/prometheus/consoles /etc/prometheus
     cp -r ~/prometheus/console_libraries /etc/prometheus
     cp ~/prometheus/promtool /usr/local/bin/
+
+- name: "copy our prometheus.yml file into the correct directory"
+  template: 
+    src: "files/prometheus.yml"
+    dest: "/etc/systemd/system/prometheus.yml"
+    force: yes
+
+
+
+- name: "copy our prometheus.service file into the correct directory"
+  template: 
+    src: "files/prometheus.service"
+    dest: "/etc/systemd/system/prometheus.service"
 
 - name: "change prometheus permissions as needed"
   shell: |
