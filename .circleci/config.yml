@@ -55,11 +55,8 @@ jobs:
                 --template-file cfn-template.yml \
                 --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
                 --region us-east-1
-        - run: 
-            name: "create inventory file"
-            command: 
         - run:
-            name: "add ip to inventory file"
+            name: "create inventory file"
             command: |
               echo "[nodejs]" > inventory 
               aws cloudformation \
