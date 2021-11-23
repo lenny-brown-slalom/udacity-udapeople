@@ -55,7 +55,7 @@
 
 - name: "get our nodejs ec2 public dns name and input into prometheus file"
   ansible.builtin.replace:
-    path: "/etc/systemd/system/prometheus.yml"
+    path: "/etc/prometheus/prometheus.yml"
     regexp: "^nodejsEC2PublicDNS$"
     replace: "{{ item }}"
   with_inventory_hostnames:
