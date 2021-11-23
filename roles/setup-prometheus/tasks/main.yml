@@ -27,7 +27,7 @@
     mode: 0755
 
 - name: "download and untar our prometheus.tar.gz file into the proper directory"
-  ansible.builtin.unarchive:
+  shell: |
     wget https://github.com/prometheus/prometheus/releases/download/v2.31.1/prometheus-2.31.1.linux-amd64.tar.gz
     tar xvfz prometheus-*.*-amd64.tar.gz
     mv prometheus-*.*-amd64.tar.gz prometheus
