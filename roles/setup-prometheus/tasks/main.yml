@@ -85,5 +85,5 @@
   shell: |
     systemctl daemon-reload
     systemctl enable prometheus
-    systemctl start node-exporter
-    systemctl status node-exporters
+    systemctl start prometheus
+    systemctl status prometheus
