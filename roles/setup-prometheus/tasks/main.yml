@@ -64,6 +64,8 @@
     path: "/etc/prometheus/prometheus.yml"
     regexp: ^nodejsEC2PublicDNS$
     replace: {{ item }}
+  with_inventory_hostnames:
+    - nodejs
   
 
 - name: "ensure /etc/systemd/system dir exists"
