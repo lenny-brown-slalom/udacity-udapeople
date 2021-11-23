@@ -63,7 +63,7 @@
   lineinfile:
     path: /etc/prometheus/prometheus.yml
     search_string: 'nodejsEC2PublicDNS'
-    line: "{{ item }}"
+    line: "      - targets: ['{{ item }}:9100']"
     owner: root
     group: root
     mode: '0644'
