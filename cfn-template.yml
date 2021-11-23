@@ -10,6 +10,9 @@ Resources:
       KeyName: udacity
       ImageId: 'ami-083654bd07b5da81d' 
       InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: NodeJSServer
   NodeJSInstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -36,6 +39,9 @@ Resources:
       KeyName: udacity
       ImageId: 'ami-083654bd07b5da81d' 
       InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: PrometheusServer
   PrometheusInstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:

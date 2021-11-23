@@ -65,7 +65,8 @@ jobs:
                 --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
                 --query "Stacks[0].Outputs[?OutputKey=='nodejsEC2PublicDNS'].OutputValue" \
                 --output text >> inventory
-              echo "\n[prometheus]" >> inventory
+              echo "" >> inventory
+              echo "[prometheus]" >> inventory
               aws cloudformation \
                 --region us-east-1 \
                 describe-stacks \
