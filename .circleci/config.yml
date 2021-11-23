@@ -72,6 +72,7 @@ jobs:
                 --stack-name udacity-udapeople-${CIRCLE_WORKFLOW_ID:0:5} \
                 --query "Stacks[0].Outputs[?OutputKey=='prometheusEC2PublicDNS'].OutputValue" \
                 --output text >> inventory
+              cat inventory | echo 
         - persist_to_workspace:
             root: .
             paths:
