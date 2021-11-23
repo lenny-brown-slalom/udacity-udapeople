@@ -45,7 +45,7 @@
     cp prometheus/prometheus /usr/local/bin/
     cp prometheus/promtool /usr/local/bin/
     cp -r prometheus/consoles /etc/prometheus
-    cp -r ~/prometheus/console_libraries /etc/prometheus
+    cp -r prometheus/console_libraries /etc/prometheus
 
 - name: "copy our prometheus.yml file into the correct directory"
   template: 
