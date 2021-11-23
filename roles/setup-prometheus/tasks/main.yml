@@ -53,15 +53,18 @@
     dest: "/etc/prometheus"
     force: yes
 
+- name: "What's in our inventory list"
+  debug:
+      msg: "{{ item }}"
+  with_inventory_hostnames:
+    - nodejs
+
 - name: "get our nodejs ec2 public dns name and input into prometheus file"
   ansible.builtin.replace:
     path: "/etc/prometheus/prometheus.yml"
-    regexp: "^nodejsEC2PublicDNS$"
-    replace: "{{ item }}"
-  debug:
-    msg: "{{ item }}"
-  with_inventory_hostnames:
-    - nodejs
+    regexp: ^nodejsEC2PublicDNS$
+    replace: {{ item }}
+  
 
 - name: "ensure /etc/systemd/system dir exists"
   file:
