@@ -43,13 +43,15 @@
     src: "files/prometheus.service"
     dest: "/etc/systemd/system/prometheus.service"
 
+- name: "ls our prometheus directory"
+  shell: ls ~/prometheus
+
 - name: "move prometheus files where they need to go"
   shell: |
     cp ~/prometheus/prometheus /usr/local/bin
     cp ~/prometheus/promtool /usr/local/bin/
     cp -r ~/prometheus/consoles /etc/prometheus
     cp -r ~/prometheus/console_libraries /etc/prometheus
-    cp ~/prometheus/promtool /usr/local/bin/
 
 - name: "copy our prometheus.yml file into the correct directory"
   template: 
