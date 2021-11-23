@@ -58,6 +58,8 @@
     path: "/etc/prometheus/prometheus.yml"
     regexp: "^nodejsEC2PublicDNS$"
     replace: "{{ item }}"
+  debug:
+    msg: "{{ item }}"
   with_inventory_hostnames:
     - nodejs
 
