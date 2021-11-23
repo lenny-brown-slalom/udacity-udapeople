@@ -190,13 +190,13 @@ workflows:
             branches:
               only:
                 - "main"
-      - configure_infrastructure:
-          requires:
-            - create_infrastructure
-          filters:
-            branches:
-              only:
-                - "main"
+      # - configure_infrastructure:
+      #     requires:
+      #       - create_infrastructure
+      #     filters:
+      #       branches:
+      #         only:
+      #           - "main"
       # - smoke_test
       # - create_and_deploy_front_end  
       # - get_last_deployment_id
