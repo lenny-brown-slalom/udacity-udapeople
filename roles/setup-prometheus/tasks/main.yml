@@ -30,7 +30,7 @@
   shell: |
     wget https://github.com/prometheus/prometheus/releases/download/v2.31.1/prometheus-2.31.1.linux-amd64.tar.gz
     tar xvfz prometheus-*.*-amd64.tar.gz
-    mv prometheus-*.*-amd64.tar.gz prometheus
+    mv prometheus-*.*-amd64 prometheus
 
 - name: "copy our prometheus.service file into the correct directory"
   template: 
