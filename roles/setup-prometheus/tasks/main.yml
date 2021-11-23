@@ -60,13 +60,15 @@
     - nodejs
 
 - name: "get our nodejs ec2 public dns name and input into prometheus file"
-  ansible.builtin.replace:
-    path: "/etc/prometheus/prometheus.yml"
-    regexp: ^nodejsEC2PublicDNS$
-    replace: "{{ item }}"
+  lineinfile:
+    path: /etc/prometheus/prometheus.yml
+    search_string: 'nodejsEC2PublicDNS'
+    line: "{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
   with_inventory_hostnames:
     - nodejs
-  
 
 - name: "ensure /etc/systemd/system dir exists"
   file:
